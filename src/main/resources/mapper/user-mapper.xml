@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.board.repository.UserRepository">
+    <insert id="save">
+        INSERT INTO user_table(userEmail, userPassword)
+        VALUES (#{userEmail}, #{userPassword})
+    </insert>
+
+    <select id="login" resultType="com.example.board.dto.UserDTO">
+        SELECT * FROM user_table
+        WHERE userEmail = #{userEmail} AND userPassword = #{userPassword}
+    </select>
+</mapper>

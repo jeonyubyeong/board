@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+<h2>이거는 게시판이다</h2>
+<h2 th:text="'나는'+ ${userEmail} +'이다'"></h2>
+<a href="/save">글작성</a>
+<a href="/list">글목록</a>
+</body>
+</html>

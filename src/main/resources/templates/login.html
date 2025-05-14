@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+<h2>로그인</h2>
+<p th:if="${needLogin}" style="color:red;">로그인부터 하쇼 </p>
+
+<form action="/login" method="post">
+    <input type="email" name="userEmail" placeholder="이메일" required><br>
+    <input type="password" name="userPassword" placeholder="비밀번호" required><br>
+    <button type="submit">로그인</button>
+</form>
+<p th:if="${loginFail}">로그인 실패. 다시 시도해주세요.</p>
+<a href="/signup">회원가입</a>
+</body>
+</html>
