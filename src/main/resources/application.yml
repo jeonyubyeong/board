@@ -4,8 +4,8 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yubyeong_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: yubyeong_user
+    url: jdbc:mysql://yubyeong-database-1.cho84c2wu03x.ap-northeast-2.rds.amazonaws.com:3306/yubyeong_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: yubyeong
     password: 1234
 
 # mybatis
