@@ -3,19 +3,20 @@ package com.example.board.service;
 import com.example.board.dto.BoardDTO;
 import com.example.board.dto.BoardFileDTO;
 import com.example.board.repository.BoardRepository;
+import com.example.board.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 
 @Service
 @RequiredArgsConstructor
 public class BoardService {
+
     private final BoardRepository boardRepository;
+    private final S3Uploader s3Uploader;
 
     public List<BoardDTO> findAll() {
         return boardRepository.findAll();
@@ -38,28 +39,26 @@ public class BoardService {
     }
 
     public void save(BoardDTO boardDTO) throws IOException {
-        if(boardDTO.getBoardFile().get(0).isEmpty()){
-            //파일 없음
+        if (boardDTO.getBoardFile().get(0).isEmpty()) {
+            // 파일 없음
             boardDTO.setFileAttached(0);
             boardRepository.save(boardDTO);
-        }else{
-            //파일이 존재함
+        } else {
+            // 파일 있음
             boardDTO.setFileAttached(1);
-            //board를 먼저 insert함
             BoardDTO savedBoard = boardRepository.save(boardDTO);
-            //파일처리 후 boardfile insert
-            for(MultipartFile boardFile : boardDTO.getBoardFile()){
+
+            for (MultipartFile boardFile : boardDTO.getBoardFile()) {
                 String originalFilename = boardFile.getOriginalFilename();
-                String storedFileName = System.currentTimeMillis()+"_"+originalFilename;
+
+                // S3에 업로드 및 URL 반환
+                String fileUrl = s3Uploader.upload(boardFile, "board");
 
                 BoardFileDTO boardFileDTO = new BoardFileDTO();
                 boardFileDTO.setOriginalFileName(originalFilename);
-                boardFileDTO.setStoredFileName(storedFileName);
+                boardFileDTO.setStoredFileName(fileUrl); // S3 URL을 그대로 저장
                 boardFileDTO.setBoardId(savedBoard.getId());
 
-                String savePath = "E:/Users/LG/Desktop/board/src/main/resources/upload_files/"+storedFileName;
-                //실질적으로 파일이 저장되는 코드
-                boardFile.transferTo(new File(savePath));
                 boardRepository.saveFile(boardFileDTO);
             }
         }
@@ -68,6 +67,7 @@ public class BoardService {
     public List<BoardFileDTO> findFile(Long id) {
         return boardRepository.findFile(id);
     }
+
     public BoardFileDTO findFileById(Long id) {
         return boardRepository.findFileById(id);
     }

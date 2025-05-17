@@ -42,7 +42,7 @@
     <tr th:if="${board.fileAttached == 1}">
         <th>image</th>
         <td th:each="boardFile : ${boardFileDTOList}">
-            <img th:src="@{|/upload/${boardFile.storedFileName}|}" alt="" width="200" height="200"><br>
+            <img th:src="@{${boardFile.storedFileName}}" alt="" width="200" height="200"><br>
             <a th:href="@{'/download/' + ${boardFile.id}}"
                th:text="${boardFile.originalFileName} + ' 다운로드'"></a>
         </td>
